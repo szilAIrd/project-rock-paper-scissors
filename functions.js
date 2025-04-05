@@ -15,12 +15,13 @@ let userScore = 0;
 let compScore = 0;
 
 
-function humanChoice(){
-    let userChoice = prompt(`Pick your choice! Type in number of your choice
-        1 - Rock
-        2 - Paper
-        3 - Scissors
-        `)
+function humanChoice(e){
+    // let userChoice = prompt(`Pick your choice! Type in number of your choice
+    //     1 - Rock
+    //     2 - Paper
+    //     3 - Scissors
+    //     `)
+    let userChoice = e.currentTarget.value;
     return userChoice
 }
 
@@ -37,10 +38,11 @@ function computerChoice(){
 }
 
 
-function playRound(humanChoice, compChoice){
+function playRound(e){
     let usecase
-    userChoice = humanChoice
-    compChoice = compChoice
+    let winner
+    userChoice = e.currentTarget.value;
+    compChoice = computerChoice()
     if(userChoice==compChoice){
         usecase=1
         // Draw
@@ -82,20 +84,67 @@ function playRound(humanChoice, compChoice){
         userScore++
         console.log("User wins round")
     }
+    scoreUser.innerHTML = `User score is ${userScore}`
+    scoreComp.innerHTML = `Comp score is ${compScore}`
 
+    if (userScore ==5 || compScore==5){
+        if (userScore>compScore)
+            {winner = "User"}
+        else {winner = "Computer"}
+        throw new Error(`Game is over! ${winner} won`);
+    }
         return {userScore, compScore}
 
     
 }
 
+const bodyElem=document.body;
 
-function playGame(){
-    for (let i=1; i<6; i++){
-    playRound(humanChoice(), computerChoice())
-    console.log(userScore,compScore)
-}
-}
+const rockBtn = document.createElement("button");
+rockBtn.textContent="Rock";
+rockBtn.value = 1;
+
+const paperBtn = document.createElement("button");
+paperBtn.textContent="Paper";
+paperBtn.value = 2;
+
+const scissorsBtn = document.createElement("button");
+scissorsBtn.textContent="Scissors";
+scissorsBtn.value = 3;
+
+const scoreUser = document.createElement("button")
+scoreUser.innerHTML = `User score is ${userScore}`
+bodyElem.appendChild(scoreUser);
+
+const scoreComp = document.createElement("button")
+scoreComp.innerHTML = `Computer score is ${compScore}`
+bodyElem.appendChild(scoreComp);
 
 
-playGame()
+
+
+bodyElem.appendChild(rockBtn);
+bodyElem.appendChild(paperBtn);
+bodyElem.appendChild(scissorsBtn);
+
+const buttons = document.querySelectorAll("button");
+
+buttons.forEach((button) => {
+    // and for each one we add a 'click' listener
+    button.addEventListener("click", playRound);
+});
+
+  
+
+
+
+// function playGame(){
+//     for (let i=1; i<6; i++){
+//     playRound(humanChoice(), computerChoice())
+//     console.log(userScore,compScore)
+// }
+// }
+
+
+// playGame()
 
